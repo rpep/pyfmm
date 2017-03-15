@@ -22,7 +22,7 @@ def CellFromCoord(r, l):
     """
     assert isinstance(l, int), "l must be an integer."
     n = 1 << l
-    return [int(r[0]) * n, int(r[1]) *n, int(r[2]) * n]
+    return [int(r[0] * n), int(r[1] * n), int(r[2] * n)]
 
 
 def IndexFromCell(X, l):
@@ -51,7 +51,7 @@ def IndexFromCoord(r, l):
     Returns the Morton index 
     from the coordinates of the particle.
     """
-    X = Cell(r, l)
+    X = CellFromCoord(r, l)
     return IndexFromCell(X, l)
 
 
@@ -69,5 +69,4 @@ def CellFromIndex(I):
         I >>= 1
         l += 1
     return (x, y, z)
-
 

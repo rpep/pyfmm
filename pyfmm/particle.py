@@ -16,5 +16,6 @@ class Particle:
     def Cell(self, l):
         return CellFromCoord(self.r, l)
     
+
     def Index(self, l):
         return IndexFromCoord(self.r, l)
