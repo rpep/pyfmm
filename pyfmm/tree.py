@@ -1,3 +1,5 @@
+from particle import Particle
+
 class NeighbourTree:
 	"""
 	NeighbourTree
@@ -6,4 +8,4 @@ class NeighbourTree:
 	for the near field calculations on each particle.
 	"""
 	def __init__(self, r, q):
-		self.p = [Particle(rp, qp) for r, q in zip(r, q)]
+		self.p = [Particle(rp, qp) for rp, qp in zip(r, q)]

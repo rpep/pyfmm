@@ -4,6 +4,8 @@ import hypothesis.strategies as st
 from hypothesis import given
 from particle import *
 
-@given(st.lists('float', min_length=3, max_length=3), st.floats())
-def test_create_particle(r, q):
+def test_create_particle():
+    r = [0.4, 0.4, 0.4]
+    q = 1
     p = Particle(r, q)
+    
