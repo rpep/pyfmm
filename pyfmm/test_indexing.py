@@ -71,3 +71,18 @@ def test_I_l4(I):
     except AssertionError:
     	print('Cells = {}, I = {}'.format(cells, I))
     	raise AssertionError
+
+
+def test_I_example_1():
+    l = 3
+    r = [0.4, 0.4, 0.4]
+    q = 1
+    assert IndexFromCoord(r, 0) == 0
+    assert IndexFromCoord(r, 1) == 0
+    assert IndexFromCoord(r, 2) == 7
+
+
+def test_IndexFromCell():
+    l = 0
+    X = [0, 0, 0]
+    assert IndexFromCell(X, l) == 0
