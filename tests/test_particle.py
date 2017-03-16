@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import hypothesis.strategies as st
 from hypothesis import given
-from particle import *
+from pyfmm import *
 
 def test_create_particle():
     r = [0.4, 0.4, 0.4]

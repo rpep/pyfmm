@@ -1,6 +1,7 @@
 from hypothesis import given
 from indexing import *
 import hypothesis.strategies as st
+from pyfmm import *
 
 @given(st.integers(0, 7))
 def test_I_l1(I):

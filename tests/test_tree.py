@@ -2,7 +2,7 @@ from hypothesis import given
 import numpy as np
 import hypothesis.strategies as st
 from hypothesis.extra.numpy import arrays
-from tree import *
+from pyfmm import *
 
 def test_create_NeighbourTree():
 	r = np.random.uniform(0, 1, (100, 3))
@@ -27,4 +27,6 @@ def test_Neighbour_Tree_Offsets_Correct():
     assert n.level_offsets == [0, 1, 9, 73]
     n = NeighbourTree(r, q, maxlevel=4)
     assert n.level_offsets == [0, 1, 9, 73, 585]
+    n = NeighbourTree(r, q, maxlevel=5)
+    assert n.level_offsets == [0, 1, 9, 73, 585, 4681]
 
