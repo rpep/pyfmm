@@ -15,7 +15,7 @@ def test_Neighbour_Tree_Sorted_Correctly():
     q = np.random.uniform(-1, 1, 100)
     n = NeighbourTree(r, q, maxlevel=3)
     if sorted(n.MortonIndices) != n.MortonIndices:
-    	raise AssertionError, "Morton Indices are not sorted in tree"
+    	raise AssertionError("Morton Indices are not sorted in tree")
 
 
 def test_Neighbour_Tree_Offsets_Correct():

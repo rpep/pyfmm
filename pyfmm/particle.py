@@ -1,4 +1,5 @@
-from indexing import *
+from __future__ import absolute_import
+from .indexing import *
 
 class Particle:
     """

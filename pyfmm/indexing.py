@@ -57,7 +57,7 @@ def IndexFromCoord(r, l):
 
 def CellFromIndex(I):
     if I != int(I):
-        raise ValueError, "I must be an integer"
+        raise ValueError("I must be an integer")
     l = 0
     x = y = z = 0
     while(I > 0):

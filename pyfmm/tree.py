@@ -1,6 +1,7 @@
-from particle import Particle
+from __future__ import absolute_import
+from .particle import Particle
 import numpy as np
-from helpers import *
+from .helpers import *
 
 class NeighbourTree:
     """
