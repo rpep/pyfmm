@@ -1,5 +1,4 @@
 from hypothesis import given
-from indexing import *
 import hypothesis.strategies as st
 from pyfmm import *
 
