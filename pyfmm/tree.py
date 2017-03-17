@@ -11,11 +11,11 @@ class NeighbourTree:
     for the near field calculations on each particle.
     """
     def __init__(self, r, q, maxlevel=2, order=0):
-        self.order = order
-        if self.order > 0:
+        self.order = order # Order of the multipole expansion
+        if self.order > 0: # Check if the order is greater than 0
             raise NotImplemented
-        self.maxlevel = maxlevel
-        self.p = [Particle(rp, qp) for rp, qp in zip(r, q)]
+        self.maxlevel = maxlevel # maximum level.
+        self.p = [Particle(rp, qp) for rp, qp in zip(r, q)] # Create particle objects
         self.p.sort(key = lambda x: x.Index(maxlevel))
         temp = [2**(3*i) for i in range(maxlevel)]
         self.n = sum(temp)
@@ -36,7 +36,12 @@ class NeighbourTree:
 
     def _P2M(self):
         for p in self.particle:
+            I = p.Cell(self.maxlevel)
+
             M[0, p.Cell(self.maxlevel) + self.level_offsets] += p.q
+
+            for i in range(1, self.maxlevel):
+                M[i]
 
 
     def _M2L(self):
