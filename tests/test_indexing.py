@@ -1,6 +1,7 @@
 from hypothesis import given
 import hypothesis.strategies as st
 from pyfmm import *
+import numpy.testing as npt
 
 @given(st.integers(0, 7))
 def test_I_l1(I):
@@ -86,3 +87,44 @@ def test_IndexFromCell():
     l = 0
     X = [0, 0, 0]
     assert IndexFromCell(X, l) == 0
+
+
+def CellCoordFromIndex(I, l):
+    """
+    Returns the coordinate of the centre of a cell given by 
+    Morton Index I at level l
+    """
+    nx = 2**l
+    return 1.0/nx*np.array(CellFromIndex(I))+1/(2.0*nx)*np.ones(3)
+
+def CellCoordFromCell(X, l):
+    """
+    Returns the coordinate of the centre of a cell given 
+    by the index at level l.
+    """
+    nx = 2**l
+    return 1.0/nx*np.array(X)+1/(2.0*nx)*np.ones(3)
+
+
+def test_CellCoordFromIndex():
+    l = 0
+    I = 0
+    CellCoordFromIndex(0, 0) == np.array([0.5, 0.5, 0.5])
+    npt.assert_array_equal(CellCoordFromIndex(0, 0), np.array([0.5, 0.5, 0.5]))
+
+def test_CellFromIndex():
+    assert CellFromIndex(0) == (0,0,0)
+    assert CellFromIndex(1) == (1,0,0)
+    assert CellFromIndex(2) == (0,1,0)
+    assert CellFromIndex(3) == (1,1,0)
+    assert CellFromIndex(4) == (0,0,1)
+    assert CellFromIndex(5) == (1,0,1)
+    assert CellFromIndex(6) == (0,1,1)
+    assert CellFromIndex(7) == (1,1,1)
+    assert CellFromIndex(8) == (2,0,0)
+    assert CellFromIndex(9) == (3,0,0)
+    assert CellFromIndex(10) == (2,1,0)
+    assert CellFromIndex(11) == (3,1,0)
+    assert CellFromIndex(12) == (2,0,1)
+    assert CellFromIndex(13) == (3,0,1)
+    assert CellFromIndex(14) == (2,1,1)

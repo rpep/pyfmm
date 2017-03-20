@@ -39,9 +39,9 @@ def IndexFromCell(X, l):
 
     I  = 0
     for i in range(l):
-        I += (X[2] & 1) << (3*i)
+        I += (X[0] & 1) << (3*i)
         I += (X[1] & 1) << (3*i + 1)
-        I += (X[0] & 1) << (3*i + 2)
+        I += (X[2] & 1) << (3*i + 2)
         X = [X[i] >> 1 for i in range(3)]
     return I
 
@@ -61,12 +61,25 @@ def CellFromIndex(I):
     l = 0
     x = y = z = 0
     while(I > 0):
-        z += (I & 1) << l
+        x += (I & 1) << l
         I >>= 1
         y += (I & 1) << l
         I >>= 1
-        x += (I & 1) << l
+        z += (I & 1) << l
         I >>= 1
         l += 1
     return (x, y, z)
 
+def CellCoordFromIndex(I, l):
+    """
+    Returns the coordinate of the centre of a cell given by 
+    Morton Index I at level l
+    """
+    return 1.0/nx*np.array(CellFromIndex(I))+1/(2.0*nx)*np.ones(3)
+
+def CellCoordFromCell(X, l):
+    """
+    Returns the coordinate of the centre of a cell given 
+    by the index at level l.
+    """
+    return 1.0/nx*np.array(X)+1/(2.0*nx)*np.ones(3)
