@@ -111,7 +111,15 @@ def test_CellCoordFromIndex():
     I = 0
     CellCoordFromIndex(0, 0) == np.array([0.5, 0.5, 0.5])
     npt.assert_array_equal(CellCoordFromIndex(0, 0), np.array([0.5, 0.5, 0.5]))
-
+    npt.assert_array_equal(CellCoordFromIndex(0, 1), np.array([0.25, 0.25, 0.25]))
+    npt.assert_array_equal(CellCoordFromIndex(1, 1), np.array([0.75, 0.25, 0.25]))
+    npt.assert_array_equal(CellCoordFromIndex(2, 1), np.array([0.25, 0.75, 0.25]))
+    npt.assert_array_equal(CellCoordFromIndex(3, 1), np.array([0.75, 0.75, 0.25]))
+    npt.assert_array_equal(CellCoordFromIndex(4, 1), np.array([0.25, 0.25, 0.75]))
+    npt.assert_array_equal(CellCoordFromIndex(5, 1), np.array([0.75, 0.25, 0.75]))
+    npt.assert_array_equal(CellCoordFromIndex(6, 1), np.array([0.25, 0.75, 0.75]))
+    npt.assert_array_equal(CellCoordFromIndex(7, 1), np.array([0.75, 0.75, 0.75]))
+  
 def test_CellFromIndex():
     assert CellFromIndex(0) == (0,0,0)
     assert CellFromIndex(1) == (1,0,0)
