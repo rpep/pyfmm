@@ -22,13 +22,13 @@ def test_Neighbour_Tree_Offsets_Correct():
     r = np.random.uniform(0, 1, (100, 3))
     q = np.random.uniform(-1, 1, 100)
     n = NeighbourTree(r, q, maxlevel=2)
-    assert n.level_offsets == [0, 1, 9]
-    n = NeighbourTree(r, q, maxlevel=3)
     assert n.level_offsets == [0, 1, 9, 73]
-    n = NeighbourTree(r, q, maxlevel=4)
+    n = NeighbourTree(r, q, maxlevel=3)
     assert n.level_offsets == [0, 1, 9, 73, 585]
-    n = NeighbourTree(r, q, maxlevel=5)
+    n = NeighbourTree(r, q, maxlevel=4)
     assert n.level_offsets == [0, 1, 9, 73, 585, 4681]
+    n = NeighbourTree(r, q, maxlevel=5)
+    assert n.level_offsets == [0, 1, 9, 73, 585, 4681, 37449]
 
 def test_Neighbour_Tree_P2M():
     r = np.random.uniform(0, 1, (100, 3))

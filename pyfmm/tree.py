@@ -66,7 +66,8 @@ class NeighbourTree:
             # Iterate through boxes in level
             for Ip in range(self.boxes[l]):
                 Ic = Ip*8 + np.arange(8)
-                
+                # Create new indices here, which are the morton index,
+                # shifted by the level.
                 Mc = Ic + self.level_offsets[l+1] # index with offset of children
                 Mp = Ip + self.level_offsets[l] # index with offset
                 print('Parent index = {}, children = {}'.format(Ip, Ic))
@@ -75,30 +76,30 @@ class NeighbourTree:
                 for i in range(8): # Iterate through children
                     rc = self._getr(Ic[i], l+1)
                     dx, dy, dz = rc - rp
-                    self.M[i, 0] += self.M[Mc[i], 0]
-                    self.M[i, 1] += self.M[Mc[i], 1]*dx
-                    self.M[i, 2] += self.M[Mc[i], 2]*dy
-                    self.M[i, 3] += self.M[Mc[i], 3]*dz
-                    self.M[i, 4] += self.M[Mc[i], 4]*dx*dx*0.5
-                    self.M[i, 5] += self.M[Mc[i], 5]*dy*dy*0.5
-                    self.M[i, 6] += self.M[Mc[i], 6]*dz*dz*0.5
-                    self.M[i, 7] += self.M[Mc[i], 7]*dx*dy*0.5
-                    self.M[i, 8] += self.M[Mc[i], 8]*dy*dz*0.5
-                    self.M[i, 9] += self.M[Mc[i], 9]*dx*dz*0.5
+                    self.M[Mp, 0] += self.M[Mc[i], 0]
+                    self.M[Mp, 1] += self.M[Mc[i], 1]*dx
+                    self.M[Mp, 2] += self.M[Mc[i], 2]*dy
+                    self.M[Mp, 3] += self.M[Mc[i], 3]*dz
+                    self.M[Mp, 4] += self.M[Mc[i], 4]*dx*dx*0.5
+                    self.M[Mp, 5] += self.M[Mc[i], 5]*dy*dy*0.5
+                    self.M[Mp, 6] += self.M[Mc[i], 6]*dz*dz*0.5
+                    self.M[Mp, 7] += self.M[Mc[i], 7]*dx*dy*0.5
+                    self.M[Mp, 8] += self.M[Mc[i], 8]*dy*dz*0.5
+                    self.M[Mp, 9] += self.M[Mc[i], 9]*dx*dz*0.5
                 
                 
     def _M2L(self):
-        raise NotImplemented
+        pass
 
     def _L2L(self):
-        raise NotImplemented
+        pass
 
     def _L2P(self):
-        raise NotImplemented
+        pass
 
     def _P2P(self):
-        raise NotImplemented
+        pass
 
     def compute_potential(self):
-        raise NotImplemented
+        pass
     
