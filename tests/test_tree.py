@@ -48,7 +48,7 @@ def test_P2P_M2M(N):
     assert n.M[0, 0] == N
 
 
-@given(st.integers(50, 100))
+@given(st.integers(50, 1000))
 def test_P2P_M2M_approx(N):
     r = np.random.uniform(0, 1, (N, 3))
     q = np.ones(N)
