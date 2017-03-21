@@ -30,3 +30,18 @@ def test_Neighbour_Tree_Offsets_Correct():
     n = NeighbourTree(r, q, maxlevel=5)
     assert n.level_offsets == [0, 1, 9, 73, 585, 4681]
 
+def test_Neighbour_Tree_P2M():
+    r = np.random.uniform(0, 1, (100, 3))
+    q = np.random.uniform(-1, 1, 100)
+    n = NeighbourTree(r, q, maxlevel=3)
+    n._P2M()
+
+
+@given(st.integers(0, 500))
+def test_P2P_M2M(N):
+    r = np.random.uniform(0, 1, (N, 3))
+    q = np.ones(N)
+    n = NeighbourTree(r, q, maxlevel=2)
+    n._P2M()
+    n._M2M()
+    assert n.M[0, 0] == N
