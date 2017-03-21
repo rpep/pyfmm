@@ -1,3 +1,5 @@
+import numpy as np
+
 def CellFromCoord(r, l):
     """
     Cell(r, l)
@@ -22,7 +24,7 @@ def CellFromCoord(r, l):
     """
     assert isinstance(l, int), "l must be an integer."
     n = 1 << l
-    return [int(r[0]) * n, int(r[1]) *n, int(r[2]) * n]
+    return [int(r[0] * n), int(r[1] * n), int(r[2] * n)]
 
 
 def IndexFromCell(X, l):
@@ -39,9 +41,9 @@ def IndexFromCell(X, l):
 
     I  = 0
     for i in range(l):
-        I += (X[2] & 1) << (3*i)
+        I += (X[0] & 1) << (3*i)
         I += (X[1] & 1) << (3*i + 1)
-        I += (X[0] & 1) << (3*i + 2)
+        I += (X[2] & 1) << (3*i + 2)
         X = [X[i] >> 1 for i in range(3)]
     return I
 
@@ -51,23 +53,36 @@ def IndexFromCoord(r, l):
     Returns the Morton index 
     from the coordinates of the particle.
     """
-    X = Cell(r, l)
+    X = CellFromCoord(r, l)
     return IndexFromCell(X, l)
 
 
 def CellFromIndex(I):
     if I != int(I):
-        raise ValueError, "I must be an integer"
+        raise ValueError("I must be an integer")
     l = 0
     x = y = z = 0
     while(I > 0):
-        z += (I & 1) << l
+        x += (I & 1) << l
         I >>= 1
         y += (I & 1) << l
         I >>= 1
-        x += (I & 1) << l
+        z += (I & 1) << l
         I >>= 1
         l += 1
-    return (x, y, z)
+    return np.array((x, y, z))
 
+def CellCoordFromIndex(I, l):
+    """
+    Returns the coordinate of the centre of a cell given by 
+    Morton Index I at level l
+    """
+    nx = 1 << l
+    return 1.0/nx*np.array(CellFromIndex(I))+1/(2.0*nx)*np.ones(3)
 
+def CellCoordFromCell(X, l):
+    """
+    Returns the coordinate of the centre of a cell given 
+    by the index at level l.
+    """
+    return 1.0/nx*np.array(X)+1/(2.0*nx)*np.ones(3)

@@ -1,4 +1,5 @@
-from indexing import *
+from __future__ import absolute_import
+from .indexing import *
 
 class Particle:
     """
@@ -16,5 +17,6 @@ class Particle:
     def Cell(self, l):
         return CellFromCoord(self.r, l)
     
+
     def Index(self, l):
         return IndexFromCoord(self.r, l)
