@@ -1,3 +1,5 @@
+import numpy as np
+
 def CellFromCoord(r, l):
     """
     Cell(r, l)
@@ -68,13 +70,14 @@ def CellFromIndex(I):
         z += (I & 1) << l
         I >>= 1
         l += 1
-    return (x, y, z)
+    return np.array((x, y, z))
 
 def CellCoordFromIndex(I, l):
     """
     Returns the coordinate of the centre of a cell given by 
     Morton Index I at level l
     """
+    nx = 1 << l
     return 1.0/nx*np.array(CellFromIndex(I))+1/(2.0*nx)*np.ones(3)
 
 def CellCoordFromCell(X, l):

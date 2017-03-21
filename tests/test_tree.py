@@ -44,4 +44,5 @@ def test_P2P_M2M(N):
     n = NeighbourTree(r, q, maxlevel=2)
     n._P2M()
     n._M2M()
+    assert sum(n.M[9:, 0]) == N
     assert n.M[0, 0] == N
