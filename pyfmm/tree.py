@@ -11,7 +11,7 @@ class NeighbourTree:
     A tree class that computes the FMM using only nearest neighbours
     for the near field calculations on each particle.
     """
-    def __init__(self, r, q, maxlevel=2):
+    def __init__(self, r, q, maxlevel=3):
         self.order = 2 # Order of the multipole expansion
         self.maxlevel = maxlevel # maximum level.
         self.p = [Particle(rp, qp) for rp, qp in zip(r, q)] # Create particle objects
@@ -62,32 +62,33 @@ class NeighbourTree:
     def _M2M(self):
         # Iterate through the levels
         for l in range(self.maxlevel-1,-1, -1):
-            print('Calculating M2M of level {}'.format(l))
+            #print('Calculating M2M of level {}'.format(l))
             # Iterate through boxes in level
             for Ip in range(self.boxes[l]):
                 Ic = Ip*8 + np.arange(8)
-                # Create new indices here, which are the morton index,
-                # shifted by the level.
+                
                 Mc = Ic + self.level_offsets[l+1] # index with offset of children
                 Mp = Ip + self.level_offsets[l] # index with offset
-                print('Parent index = {}, children = {}'.format(Ip, Ic))
-                print('OParent index = {}, Ochildren = {}'.format(Mp, Mc))
+                #print('Parent index = {}, children = {}'.format(Ip, Ic))
+                #print('OParent index = {}, Ochildren = {}'.format(Mp, Mc))
                 rp = self._getr(Ip, l) # Coordinates of the parent
                 for i in range(8): # Iterate through children
                     rc = self._getr(Ic[i], l+1)
                     dx, dy, dz = rc - rp
-                    self.M[Mp, 0] += self.M[Mc[i], 0]
-                    self.M[Mp, 1] += self.M[Mc[i], 1]*dx
-                    self.M[Mp, 2] += self.M[Mc[i], 2]*dy
-                    self.M[Mp, 3] += self.M[Mc[i], 3]*dz
-                    self.M[Mp, 4] += self.M[Mc[i], 4]*dx*dx*0.5
-                    self.M[Mp, 5] += self.M[Mc[i], 5]*dy*dy*0.5
-                    self.M[Mp, 6] += self.M[Mc[i], 6]*dz*dz*0.5
-                    self.M[Mp, 7] += self.M[Mc[i], 7]*dx*dy*0.5
-                    self.M[Mp, 8] += self.M[Mc[i], 8]*dy*dz*0.5
-                    self.M[Mp, 9] += self.M[Mc[i], 9]*dx*dz*0.5
-                
-                
+                    self.M[Mp, 0] += self.M[Mc[i], 0] # M_p
+                    self.M[Mp, 1] += self.M[Mc[i], 1] + self.M[Mc[i], 0]*dx # D_px
+                    self.M[Mp, 2] += self.M[Mc[i], 2] + self.M[Mc[i], 0]*dy # D_py
+                    self.M[Mp, 3] += self.M[Mc[i], 3] + self.M[Mc[i], 0]*dz # D_pz
+                    self.M[Mp, 4] += self.M[Mc[i], 4] + dz*self.M[Mc[i], 1] + 0.5*self.M[Mc[i], 0]*dx**2 # Q_pxx
+                    self.M[Mp, 5] += self.M[Mc[i], 5] + dz*self.M[Mc[i], 2] + 0.5*self.M[Mc[i], 0]*dy**2 # Q_pyy
+                    self.M[Mp, 6] += self.M[Mc[i], 6] + dz*self.M[Mc[i], 3] + 0.5*self.M[Mc[i], 0]*dz**2 # Q_pzz
+                    self.M[Mp, 7] += self.M[Mc[i], 7] + 0.5*dx*self.M[Mc[i], 2] + 0.5*dy*self.M[Mc[i],1] + 0.5*dx*dy*self.M[Mc[i], 0] # Q_pxy
+                    self.M[Mp, 8] += self.M[Mc[i], 8] + 0.5*dy*self.M[Mc[i], 3] + 0.5*dz*self.M[Mc[i],2] + 0.5*dy*dz*self.M[Mc[i], 0]# Q_pyz
+                    self.M[Mp, 9] += self.M[Mc[i], 9] + 0.5*dz*self.M[Mc[i], 1] + 0.5*dx*self.M[Mc[i],3] + 0.5*dx*dz*self.M[Mc[i], 0]# Q_pxz
+# parent.multipole[7:] += 0.5*numpy.array((child.multipole[2], child.multipole[3], child.multipole[1])) * numpy.array((dx, dy, dz))\
+#                                 + 0.5*child.multipole[1:4] * numpy.array((dy, dz, dx))\
+#                                 + 0.5*child.multipole[0] * numpy.array((dx*dy, dy*dz, dz*dx))
+
     def _M2L(self):
         pass
 
@@ -102,4 +103,5 @@ class NeighbourTree:
 
     def compute_potential(self):
         pass
+
     

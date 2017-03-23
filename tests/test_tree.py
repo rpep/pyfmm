@@ -76,4 +76,3 @@ def test_P2P_M2M_approx(N):
     phi_approx = np.dot(n.M[0], weights)
     diff = np.sqrt((phi_approx - phi_actual)**2)/phi_actual
     assert diff <= 1e-3
-    #assert 2 == 1, 'd = {}'.format(diff)
