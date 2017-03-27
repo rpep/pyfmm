@@ -42,7 +42,7 @@ class NeighbourTree:
 
     def _getr(self, I, l):
         return CellCoordFromIndex(I, l)
-    
+
     def _P2M(self):
         for p in self.p:
             I = p.Index(self.maxlevel)
@@ -66,7 +66,7 @@ class NeighbourTree:
             # Iterate through boxes in level
             for Ip in range(self.boxes[l]):
                 Ic = Ip*8 + np.arange(8)
-                
+
                 Mc = Ic + self.level_offsets[l+1] # index with offset of children
                 Mp = Ip + self.level_offsets[l] # index with offset
                 #print('Parent index = {}, children = {}'.format(Ip, Ic))
@@ -85,15 +85,26 @@ class NeighbourTree:
                     self.M[Mp, 7] += self.M[Mc[i], 7] + 0.5*dx*self.M[Mc[i], 2] + 0.5*dy*self.M[Mc[i],1] + 0.5*dx*dy*self.M[Mc[i], 0] # Q_pxy
                     self.M[Mp, 8] += self.M[Mc[i], 8] + 0.5*dy*self.M[Mc[i], 3] + 0.5*dz*self.M[Mc[i],2] + 0.5*dy*dz*self.M[Mc[i], 0]# Q_pyz
                     self.M[Mp, 9] += self.M[Mc[i], 9] + 0.5*dz*self.M[Mc[i], 1] + 0.5*dx*self.M[Mc[i],3] + 0.5*dx*dz*self.M[Mc[i], 0]# Q_pxz
-# parent.multipole[7:] += 0.5*numpy.array((child.multipole[2], child.multipole[3], child.multipole[1])) * numpy.array((dx, dy, dz))\
-#                                 + 0.5*child.multipole[1:4] * numpy.array((dy, dz, dx))\
-#                                 + 0.5*child.multipole[0] * numpy.array((dx*dy, dy*dz, dz*dx))
 
     def _M2L(self):
-        pass
+        for l in range(2, self.maxlevel, 1):
+            for I in range(self.boxes[l]):
+                for J in range(self.boxes[l]):
+                    XI = CellFromIndex(I)
+                    XJ = CellFromIndex(J)
+                    if (abs(np.int(XI/2) - np.int(XJ/2)) <= 1).all():
+                        if (abs(np.int(XI) - np.int(XJ)) > 1).all():
+                            dr = (XI - XJ)/ (2**l)
+                            r = np.sqrt(dr.dot(dr))
+                            self.L[i + self.level_offsets[l]] += self.M[j + self.level_offsets[l] / r]
+
 
     def _L2L(self):
-        pass
+        for l in range(3, self.maxlevel):
+            n = 2**l
+            N = n * n
+            for i in range(N):
+                self.L[i + level_offsets[l]] += self.L[int(i/4) + self.level_offsets[l-1]]
 
     def _L2P(self):
         pass
@@ -103,5 +114,3 @@ class NeighbourTree:
 
     def compute_potential(self):
         pass
-
-    
